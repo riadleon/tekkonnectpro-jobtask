@@ -1,12 +1,46 @@
 import React from 'react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import './InputEmail.css'
-import { FaBeer, FaCheckCircle, FaCross, FaExclamation, FaXRay } from 'react-icons/fa';
+
 
 
 const InputEmail = () => {
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState(false)
+
+    const { register, handleSubmit, resetField, rest, formState: { errors } } = useForm();
+    const [givemessage, setGiveMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+
+
+    const onSubmitHandler = user => {
+        fetch('http://localhost:8000/single', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(user)
+        }).then(() => {
+            console.log(`${user.email}  is inserted successfully!!!`);
+            toast(`${user.email} updated  in to the table!!!`);
+            resetField("email");
+            setErrorMessage('');
+            navigate('/')
+        }).catch(error => {
+            console.error(error.message);
+            toast('Insert Data failed!!!');
+            setGiveMessage('');
+        });
+    };
+
+    const onFocusHandler = () => {
+        setGiveMessage('');
+        setErrorMessage('');
+    };
+
+
 
     const emailValidation = (e) => {
         var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
@@ -20,7 +54,7 @@ const InputEmail = () => {
     }
     return (
         <div>
-            <form >
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <div className="section">
                     <div className="container">
                         <div className="row full-height justify-content-center">
@@ -37,7 +71,9 @@ const InputEmail = () => {
                                                         <div className="form-group mt-2">
                                                             <input
                                                                 type="email"
-                                                                name="email"
+                                                                onFocus={onFocusHandler} {...register('email',  {
+                                                                    required: "Email is Required"
+                                                                })}
                                                                 className={
                                                                     email.length === 0
                                                                         ? "form-style fill-email"
@@ -63,13 +99,13 @@ const InputEmail = () => {
                                                         </div>
 
                                                         <button className={
-                                                            email.length === 0
+                                                            email.length == 0
                                                                 ? "btn mt-4 btn-disabled fill-color  "
                                                                 : message
                                                                     ? "btn mt-4"
                                                                     : "btn mt-4 btn-disabled fill-color "
                                                         }>Add to Table</button>
-                                                       
+
 
 
                                                     </div>

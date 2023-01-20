@@ -1,26 +1,38 @@
 import React from 'react';
+import { useLoaderData } from 'react-router-dom';
+import { FaBeer, FaMarkdown, FaThumbsUp } from 'react-icons/fa';
 
 const TableSingleEmails = () => {
+    const emails = useLoaderData([])
+    console.log(emails);
     return (
-        <div className="overflow-x-auto">
+        <div className="bg min-h-screen justify-center  items-center text-lg  pt-10">
             <table className="table w-3/4 mx-auto">
 
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Email</th>
+
+                        <th>Serial</th>
+                        <th>Verified Email</th>
                         <th>Verified Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
 
-                    <tr className="hover">
-                        <th>1</th>
-                        <td>Cy Ganderton</td>
-                        <td>Blue</td>
-                    </tr>
+                    {
+                        emails.map((user, i) => <tr key={user._id}>
+                            <th>{i + 1}</th>
 
-  
+                            <td>{user.email}</td>
+                            <td> <FaThumbsUp className='success-color'></FaThumbsUp> </td>
+
+
+                        </tr>)
+                    }
+
+
+
                 </tbody>
             </table>
         </div>
