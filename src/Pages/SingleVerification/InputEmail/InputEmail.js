@@ -2,16 +2,20 @@ import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import './InputEmail.css'
 
 
 
+
 const InputEmail = () => {
+    
+
+
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState(false)
 
-    const { register, handleSubmit, resetField, rest, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, rest, formState: { errors } } = useForm();
     const [givemessage, setGiveMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -25,7 +29,7 @@ const InputEmail = () => {
         }).then(() => {
             console.log(`${user.email}  is inserted successfully!!!`);
             toast(`${user.email} updated  in to the table!!!`);
-            resetField("email");
+            reset('email');
             setErrorMessage('');
             navigate('/')
         }).catch(error => {
@@ -71,11 +75,11 @@ const InputEmail = () => {
                                                         <div className="form-group mt-2">
                                                             <input
                                                                 type="email"
-                                                                onFocus={onFocusHandler} {...register('email',  {
+                                                                onFocus={onFocusHandler} {...register('email', {
                                                                     required: "Email is Required"
                                                                 })}
                                                                 className={
-                                                                    email.length === 0
+                                                                    email.length == 0
                                                                         ? "form-style fill-email"
                                                                         : message
                                                                             ? "form-style valid-email"
@@ -83,7 +87,7 @@ const InputEmail = () => {
                                                                 }
                                                                 placeholder="Enter Email"
                                                                 id="logmail"
-                                                                autocomplete="off"
+                                                                autoComplete="off"
                                                                 onChange={emailValidation}
                                                                 value={email}
                                                                 required />
